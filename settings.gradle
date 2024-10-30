@@ -1,0 +1,4 @@
+rootProject.name = 'AppleCertDistribute-Server'
+
+include 'cert-admin'
+include 'cert-common'
