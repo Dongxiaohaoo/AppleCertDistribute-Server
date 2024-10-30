@@ -1,0 +1,7 @@
+archivesBaseName = 'cert-common'
+version = '1.0.0'
+
+bootJar {
+    enabled = false
+}
+
