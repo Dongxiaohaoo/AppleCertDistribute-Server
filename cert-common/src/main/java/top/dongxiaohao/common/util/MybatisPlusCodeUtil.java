@@ -1,4 +1,4 @@
-package top.dongxiaohao.common;
+package top.dongxiaohao.common.util;
 
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.*;

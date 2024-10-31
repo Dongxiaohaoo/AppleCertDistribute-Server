@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
+import javax.annotation.Resource;
 import javax.servlet.Filter;
 import java.util.List;
 
@@ -30,40 +31,38 @@ public abstract class AbstractSecurityConfig extends WebSecurityConfigurerAdapte
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
-    @Value(value = "${secure.ignoreUrls}")
-    private List<String> ignoreUrls;
+    @Resource
+    private IgnoreUrlsConfig ignoreUrls;
+
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = httpSecurity
                 .authorizeRequests();
 
-        for (String url : ignoreUrls)
+        for (String url : ignoreUrls.getIgnoreUrls())
             registry.antMatchers(url).permitAll();
 
         registry.and()
                 .cors()
                 .and()
-                .csrf()// 由于使用的是JWT，我们这里不需要csrf
+                .csrf()
                 .disable()
-                .sessionManagement()// 基于token，所以不需要session
+                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS)//跨域请求会先进行一次options请求
+                .antMatchers(HttpMethod.OPTIONS)
                 .permitAll()
-                .anyRequest()// 除上面外的所有请求全部需要鉴权认证
+                .anyRequest()
                 .authenticated();
-        // 禁用缓存
         httpSecurity.headers().cacheControl();
-        // 添加JWT filter
-        httpSecurity.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-        //添加自定义未授权和未登录结果返回
+        //httpSecurity.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         httpSecurity.exceptionHandling()
-                .accessDeniedHandler(restfulAccessDeniedHandler)
+                //.accessDeniedHandler(restfulAccessDeniedHandler)
                 .authenticationEntryPoint(restAuthenticationEntryPoint);
 
-        if (logoutUrl() != null && logoutSuccessHandler() != null)//退出
+        if (logoutUrl() != null && logoutSuccessHandler() != null)
             httpSecurity.logout()
                     .logoutUrl(logoutUrl())
                     .invalidateHttpSession(true)

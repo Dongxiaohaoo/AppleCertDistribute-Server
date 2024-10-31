@@ -2,17 +2,22 @@ package top.dongxiaohao.common.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 
+import java.util.Collection;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import top.dongxiaohao.common.enums.SysUserEnum;
 
 /**
  * <p>
@@ -26,7 +31,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-public class SysUser implements Serializable {
+public class SysUser implements Serializable, UserDetails {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,7 +54,7 @@ public class SysUser implements Serializable {
     /**
      * 账号
      */
-    private String account;
+    private String username;
 
     /**
      * 密码
@@ -81,4 +86,33 @@ public class SysUser implements Serializable {
     private Integer updatedBy;
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return Objects.equals(this.disable, SysUserEnum.Status.ENABLE.getCode());
+    }
 }

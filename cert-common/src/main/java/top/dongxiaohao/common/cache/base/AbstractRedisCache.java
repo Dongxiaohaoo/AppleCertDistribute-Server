@@ -19,10 +19,9 @@ public abstract class AbstractRedisCache {
     private static final Long MUTEX_EXPIRE = 10000L;
     @Autowired
     public RedisTemplate<String, Object> redisTemplate;
-    @Value("${project.cache.key.namespace}")
-    protected String cacheKeyNameSpace;
     @Autowired
     private RedisLock redisLock;
+    protected String cacheKeyNameSpace = "apple_cert";
 
     protected <T> T getValue(String key, CacheCallback<T> callback) {
         ValueOperations ops = this.redisTemplate.opsForValue();

@@ -1,9 +1,10 @@
 package top.dongxiaohao.common.cache;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import top.dongxiaohao.common.JwtTokenUtil;
+import top.dongxiaohao.common.util.JwtTokenUtil;
 import top.dongxiaohao.common.cache.base.AbstractRedisCache;
 import top.dongxiaohao.common.constant.RedisKey;
 
@@ -47,13 +48,13 @@ public class UserTokenCache extends AbstractRedisCache {
 
     public void deleteUserToken(String token) {
         String uuid = jwtTokenUtil.getSubjectFromToken(token);
-        if (StringUtils.isNotBlank(uuid))
+        if (StrUtil.isNotBlank(uuid))
             deleteValue(cacheKey(uuid));
     }
 
     public Integer getUserId(String token) {
         String uuid = jwtTokenUtil.getSubjectFromToken(token);
-        if (StringUtils.isNotBlank(uuid)) {
+        if (StrUtil.isNotBlank(uuid)) {
             Integer userId = getValue(cacheKey(uuid));
             if (userId != null)
                 return userId;
@@ -64,7 +65,7 @@ public class UserTokenCache extends AbstractRedisCache {
 
     public void refreshTokenExpireTime(String token) {
         String uuid = jwtTokenUtil.getSubjectFromToken(token);
-        if (StringUtils.isNotBlank(uuid))
+        if (StrUtil.isNotBlank(uuid))
             this.refreshKey(cacheKey(uuid), timeOut, TimeUnit.MINUTES.toMillis(10));
     }
 

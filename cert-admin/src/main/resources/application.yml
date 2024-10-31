@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: cert
+    password: 123456
+    url: jdbc:mysql://192.168.6.189:3307/apple_cert?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+  redis:
+    host: 192.168.6.189
+    port: 6379
+
+
+secure:
+  jwt:
+    tokenHeader: Authorization
+    secret: apple-cert
+    expiration: 604800
+    tokenHead: 'Bearer '
+  ignoreUrls:
+    - /api/cert/login
+    - /api/cert/logout
+    - /api/user/test

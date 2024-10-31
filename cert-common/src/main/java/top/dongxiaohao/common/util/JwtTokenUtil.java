@@ -1,4 +1,4 @@
-package top.dongxiaohao.common;
+package top.dongxiaohao.common.util;
 
 import cn.hutool.core.util.StrUtil;
 import io.jsonwebtoken.Claims;
@@ -23,14 +23,14 @@ public class JwtTokenUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
     private static final String CLAIM_KEY_SUBJECT = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
-    @Value("${jwt.secret}")
+    @Value("${secure.jwt.secret}")
     private String secret;
-    @Value("${jwt.expiration}")
+    @Value("${secure.jwt.expiration}")
     private Long expiration;
 
-    @Value("${jwt.tokenHeader}")
+    @Value("${secure.jwt.tokenHeader}")
     private String tokenHeader;
-    @Value("${jwt.tokenHead}")
+    @Value("${secure.jwt.tokenHead}")
     private String tokenHead;
 
 
